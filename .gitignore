@@ -1,16 +1,16 @@
 #solution
 *.sln
+*.dll
+*.lib
+*.vcxproj
+*.png
 
 #Folder
 
 Debug/
-
 Release/
-
 .vs/
-
-PBD/Models/
-
-PBD/Release/
-
-PBD/out
+external/
+include/
+lib/
+x64/
