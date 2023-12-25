@@ -4,13 +4,13 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+uniform sampler2D tex;
 
 void main()
 {
-    vec4 col = texture2D(screenTexture, TexCoords);
+    vec4 col = texture2D(tex, TexCoords);
 
-    // 선을 하얗게 출력
+    // force color set map line
     if(col.a > 0)
         col = vec4(1, 1, 1, 1);
 
