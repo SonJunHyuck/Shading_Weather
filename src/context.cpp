@@ -32,7 +32,7 @@ bool Context::Init()
     // SPDLOG_INFO("program id: {}", m_textureProgram->Get());
 
     // shader
-    m_quadProgram = Program::Create("./shader/texture.vs", "./shader/texture.fs");
+    m_quadProgram = Program::Create("./shader/map.vs", "./shader/map.fs");
     if (!m_quadProgram)
       return false;
     SPDLOG_INFO("program id: {}", m_quadProgram->Get());
