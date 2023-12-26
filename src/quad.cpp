@@ -10,10 +10,10 @@ QuadUPtr Quad::Create(const std::vector<Vertex> &vertices, const std::vector<uin
 QuadUPtr Quad::CreateQuad() 
 {
   std::vector<Vertex> vertices = {
-    Vertex { glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f) },
-    Vertex { glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 0.0f) },
-    Vertex { glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec2(1.0f, 1.0f) },
-    Vertex { glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec2(0.0f, 1.0f) },
+    Vertex { glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f) },
+    Vertex { glm::vec3( 1.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f) },
+    Vertex { glm::vec3( 1.0f,  1.0f, 0.0f), glm::vec2(1.0f, 1.0f) },
+    Vertex { glm::vec3(-1.0f,  1.0f, 0.0f), glm::vec2(0.0f, 1.0f) },
   };
 
   std::vector<uint32_t> indices = { 0,  1,  2,  2,  3,  0, };

@@ -1,4 +1,4 @@
-#version 430
+#version 410
 
 out vec4 FragColor;
 
@@ -8,10 +8,12 @@ uniform sampler2D tex;
 
 void main()
 {
-    vec4 col = texture2D(tex, TexCoords);
+    vec4 col = texture(tex, TexCoords);
+
+    // flip
 
     // force color set map line
-    if(col.a > 0)
+    if(col.w > 0.01)
         col = vec4(1, 1, 1, 1);
 
     FragColor = col;
