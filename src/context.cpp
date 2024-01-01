@@ -20,27 +20,58 @@ void Context::Reshape(int width, int height)
 
 bool Context::Init()
 {
-    // ========== Create & Attach & Link ========= (create shader func has covered program clas)
-    // m_program = Program::Create("./shader/lighting.vs", "./shader/lighting.fs");
-    // if (!m_program)
-    //     return false;
-    // SPDLOG_INFO("program id: {}", m_program->Get());
-
-    // m_textureProgram = Program::Create("./shader/map.vs", "./shader/map.fs");
-    // if (!m_textureProgram)
-    //   return false;
-    // SPDLOG_INFO("program id: {}", m_textureProgram->Get());
-
     // shader
-    m_quadProgram = Program::Create("./shader/map.vs", "./shader/map.fs");
-    if (!m_quadProgram)
+    m_particleProgram = Program::Create("./shader/particle.vs", "./shader/particle.fs");
+    if (!m_particleProgram)
       return false;
-    SPDLOG_INFO("program id: {}", m_quadProgram->Get());
+    SPDLOG_INFO("tail program id: {}", m_particleProgram->Get());
+
+    m_mapProgram = Program::Create("./shader/map.vs", "./shader/map.fs");
+    if (!m_mapProgram)
+      return false;
+    SPDLOG_INFO("quad program id: {}", m_mapProgram->Get());
+
+    m_postProgram = Program::Create("./shader/texture.vs", "./shader/texture.fs");
+    if (!m_postProgram)
+      return false;
+    SPDLOG_INFO("post program id: {}", m_postProgram->Get());
+
+    // compute shader
+    m_computeProgram = Program::Create("./shader/compute.cs");
+    if (!m_computeProgram)
+      return false;
+    SPDLOG_INFO("compute program id: {}", m_computeProgram->Get());
 
     // texture
     m_worldTexture = Texture::CreateFromImage(Image::Load("./images/world.png").get());
+    m_windTexture = Texture::CreateFromImage(Image::Load("./images/wind.png").get());
 
+    // quad
     m_worldQuad = Quad::CreateQuad();
+    m_screenQuad = Quad::CreateQuad();
+
+    // particle
+    double particleNum = 1024 * 32;
+    int tailLength = 256;
+    m_particleResolution = ceil(sqrt(particleNum));
+    particleNum = m_particleResolution * m_particleResolution;  // sqrt 후 재보정
+
+    // particle state texture
+    std::vector<glm::vec4> particleState = std::vector<glm::vec4>((double)particleNum);
+    for (int i = 0; i < particleState.size(); i++)
+    {
+      uint8_t r = floor(((float)rand() / (float)RAND_MAX) * tailLength);
+      uint8_t g = floor(((float)rand() / (float)RAND_MAX) * tailLength);
+      uint8_t b = floor(((float)rand() / (float)RAND_MAX) * tailLength);
+      uint8_t a = floor(((float)rand() / (float)RAND_MAX) * tailLength);
+      particleState[i] = glm::vec4(r, g, b, a);
+      //SPDLOG_INFO("{} {} {} {}", r, g, b, a);
+    }
+    m_particleStateTexture = Texture::CreateFromImage(Image::CreateWithData(m_particleResolution, m_particleResolution, particleState).get());
+
+    m_particles = Particle::Create(particleNum, particleNum * tailLength, GL_POINTS);
+    m_particles->SetParticleNum(particleNum);
+    m_particles->SetTailLength(tailLength);
 
     glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
 
@@ -49,11 +80,6 @@ bool Context::Init()
 
 void Context::Render()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     // begin, end pair -> UI Window #imgui
     if (ImGui::Begin("Wind Params"))
     {
@@ -65,9 +91,49 @@ void Context::Render()
     }
     ImGui::End();
 
-    //m_framebuffer->Bind();
-    m_quadProgram->Use();
+    glActiveTexture(GL_TEXTURE0);
+    m_framebuffer->GetColorAttachment()->Bind();
+    glActiveTexture(GL_TEXTURE1);
+    m_windTexture->Bind();
+    glActiveTexture(GL_TEXTURE2);
+    m_particleStateTexture->Bind();
+    glActiveTexture(GL_TEXTURE3);
     m_worldTexture->Bind();
-    m_quadProgram->SetUniform("tex", 0);
-    m_worldQuad->Draw(m_quadProgram.get());
+
+    // active compute shader
+    glUseProgram(m_computeProgram->Get());
+    m_computeProgram->SetUniform("current_frame", m_currentFrame);
+    m_computeProgram->SetUniform("particle_res", m_particleResolution);
+    m_computeProgram->SetUniform("tail_length", m_particles->GetTailLength());
+    m_computeProgram->SetUniform("wind_texture", 1);
+    m_computeProgram->SetUniform("particle_texture", 2);
+    glDispatchCompute(m_particles->GetParticleNum() / m_particles->GetTailLength(), 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+
+    // on the framebuffer
+    m_framebuffer->Bind();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // draw particle
+    m_particleProgram->Use();
+    m_particles->Draw(m_particleProgram.get());
+
+    // drawm world map
+    m_mapProgram->Use();
+    m_mapProgram->SetUniform("tex", 3);
+    m_worldQuad->Draw(m_mapProgram.get());
+
+    // off the framebuffer
+    Framebuffer::BindToDefault();
+
+    // rendering
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    m_postProgram->Use();
+    m_postProgram->SetUniform("tex", 0);
+    m_screenQuad->Draw(m_postProgram.get());
 }

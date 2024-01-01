@@ -8,6 +8,7 @@
 #include "vertex_layout.h"
 #include "texture.h"
 #include "quad.h"
+#include "particle.h"
 #include "framebuffer.h"
 
 CLASS_PTR(Context)
@@ -22,30 +23,25 @@ public:
     static ContextUPtr Create();
     void Render();
     void Reshape(int width, int height);
+    void IncrementFrameCount() { m_currentFrame++; }
 
 private:
-    // particle
-    struct Particle
-    {
-        glm::vec2 position;
-        glm::vec2 tail;
-        glm::vec4 tail_color;
-        int m_tail_length;
-        float life;
-        float age;
-    };
-
     bool Init();
 
-    //ProgramUPtr m_program;
-    //ProgramUPtr m_textureProgram;
-    ProgramUPtr m_quadProgram; 
+    ProgramUPtr m_particleProgram;
+    ProgramUPtr m_mapProgram;
+    ProgramUPtr m_postProgram;
+    ProgramUPtr m_computeProgram;
 
-    // ModelUPtr m_model; // Backpack
     TexturePtr m_windowTexture;
     TexturePtr m_worldTexture;
+    TexturePtr m_windTexture;
+    TexturePtr m_particleStateTexture;
 
     QuadUPtr m_worldQuad;
+    QuadUPtr m_screenQuad;
+
+    ParticleUPtr m_particles;
 
     // clear color
     glm::vec4 m_clearColor { glm::vec4(0.0f, 0.0f, 0.0f, 0.0f) };
@@ -58,7 +54,8 @@ private:
     int m_height { WINDOW_HEIGHT };
 
     // frame
-    int m_currentFrame;
+    int m_currentFrame { 0 };
+    float m_particleResolution { 0 };
 };
 
 #endif // __CONTEXT_H__
