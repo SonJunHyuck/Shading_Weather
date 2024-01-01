@@ -4,7 +4,6 @@
 #include "common.h"
 #include "buffer.h"
 #include "vertex_layout.h"
-#include "texture.h"
 #include "program.h"
 
 struct Vertex
@@ -16,15 +15,17 @@ struct Vertex
 CLASS_PTR(Quad);
 class Quad
 {
+
 public:
     static QuadUPtr Create(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices, uint32_t primitiveType);
     static QuadUPtr CreateQuad();
+    static QuadUPtr CreateQuad(const float min, const float max);
 
     const VertexLayout *GetVertexLayout() const { return m_vertexLayout.get(); }
     BufferPtr GetVertexBuffer() const { return m_vertexBuffer; }
     BufferPtr GetIndexBuffer() const { return m_indexBuffer; }
 
-    void Draw(const Program* program) const;
+    void Draw(const Program *program) const;
 
 private:
     Quad() {}

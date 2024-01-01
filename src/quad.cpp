@@ -21,6 +21,20 @@ QuadUPtr Quad::CreateQuad()
   return Create(vertices, indices, GL_TRIANGLES);
 }
 
+QuadUPtr Quad::CreateQuad(const float min, const float max)
+{
+  std::vector<Vertex> vertices = {
+    Vertex { glm::vec3(min, min, 0.0f), glm::vec2(0.0f, 0.0f) },
+    Vertex { glm::vec3(max, min, 0.0f), glm::vec2(1.0f, 0.0f) },
+    Vertex { glm::vec3(max, max, 0.0f), glm::vec2(1.0f, 1.0f) },
+    Vertex { glm::vec3(min, max, 0.0f), glm::vec2(0.0f, 1.0f) },
+  };
+
+  std::vector<uint32_t> indices = { 0,  1,  2,  2,  3,  0, };
+
+  return Create(vertices, indices, GL_TRIANGLES);
+}
+
 void Quad::Draw(const Program* program) const
 {
     m_vertexLayout->Bind();
