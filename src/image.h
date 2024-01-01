@@ -16,6 +16,7 @@ public:
     static ImageUPtr Load(const std::string &filepath);
     static ImageUPtr Create(int width, int height, int channelCount = 4);
     static ImageUPtr CreateSingleColorImage(int width, int height, const glm::vec4& color);
+    static ImageUPtr CreateWithData(int width, int height, const std::vector<glm::vec4>& data);
 
     const uint8_t *GetData() const { return m_data; }
     int GetWidth() const { return m_width; }

@@ -51,6 +51,19 @@ ImageUPtr Image::CreateSingleColorImage(int width, int height, const glm::vec4 &
     return std::move(image);
 }
 
+ImageUPtr Image::CreateWithData(int width, int height, const std::vector<glm::vec4>& data)
+{
+    auto image = Create(width, height, 4);
+    for (int i = 0; i < width * height; i++)
+    {
+        glm::vec4 color = data[i];
+        uint8_t rgba[4] = { (uint8_t)color.r, (uint8_t)color.g, (uint8_t)color.b, (uint8_t)color.a };
+        memcpy(image->m_data + i * 4, rgba, sizeof(rgba));
+    }
+
+    return std::move(image);
+}
+
 bool Image::LoadWithStb(const std::string &filepath)
 {
     stbi_set_flip_vertically_on_load(true);
