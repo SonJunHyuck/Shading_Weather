@@ -43,6 +43,7 @@ add_executable(${PROJECT_NAME}
     src/texture.cpp src/texture.h
     src/framebuffer.cpp src/framebuffer.h
     src/quad.cpp src/quad.h
+    src/particle.cpp src/particle.h
 )
 
 # --------------------------------------------------------
