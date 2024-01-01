@@ -47,7 +47,8 @@ void Texture::CreateTexture()
     glGenTextures(1, &m_texture);
     // bind and set default filter and wrap option
     Bind();
-    SetFilter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    SetFilter(GL_NEAREST, GL_NEAREST);
+    //SetFilter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
     SetWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 }
 
