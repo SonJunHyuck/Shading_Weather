@@ -15,7 +15,7 @@ ShaderUPtr Shader::CreateFromFile(const std::string &filename, GLenum shaderType
 
     // 로드 실패 시, shader 메모리 자동 해제 <- unique_ptr이니까
     if (!shader->LoadFile(filename, shaderType))
-        return nullptr;
+        return nullptr; 
 
     // 로드 성공 시, shader 메모리 이전
     return std::move(shader);

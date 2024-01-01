@@ -16,6 +16,7 @@ public:
 public:
     static ProgramUPtr Create(const std::vector<ShaderPtr> &shaders);
     static ProgramUPtr Create(const std::string &vertShaderFilename, const std::string &fragShaderFilename);
+    static ProgramUPtr Create(const std::string &compShaderFilename);
 
     uint32_t Get() const { return m_program; }
     void Use() const;

@@ -30,6 +30,16 @@ ProgramUPtr Program::Create(const std::string &vertShaderFilename, const std::st
     return std::move(Create({vs, fs}));
 }
 
+ProgramUPtr Program::Create(const std::string &compShaderFilename)
+{
+    ShaderPtr cp = Shader::CreateFromFile(compShaderFilename, GL_COMPUTE_SHADER);
+
+    if (!cp)
+        return nullptr;
+    
+    return std::move(Create({cp}));
+}
+
 bool Program::Link(const std::vector<ShaderPtr> &shaders)
 {
     // create program and get program id
