@@ -15,6 +15,7 @@ public:
 public:
     static TextureUPtr Create(int width, int height, uint32_t format);
     static TextureUPtr CreateFromImage(const Image *image);    
+    static TextureUPtr CreateFromImage(const Image *image, uint32_t minFilter, uint32_t magFilter);    
 
     const uint32_t Get() const { return m_texture; }
     void Bind() const;
@@ -27,6 +28,7 @@ public:
 
 private:
     void CreateTexture();  // bool이 아니라 void -> 무조건 성공을 가정
+    void CreateTexture(uint32_t minFilter, uint32_t magFilter);
     void SetTextureFromImage(const Image *image);
     void SetTextureFormat(int width, int height, uint32_t format);
 

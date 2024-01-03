@@ -25,20 +25,20 @@ CLASS_PTR(Particle);
 class Particle
 {
 public:
-    static ParticleUPtr Create(const uint32_t inParticleNum, const uint32_t inTailLength, uint32_t primitiveType);
+    static ParticleUPtr Create(const uint32_t inParticleNum, const uint32_t inTailNum, uint32_t primitiveType);
 
     const VertexLayout *GetVertexLayout() const { return m_vertexLayout.get(); }
     const uint32_t GetParticleNum() const { return particleNum; }
-    const float GetTailLength() const { return tailLength; }
+    const int GetTailLength() const { return tailLength; }
     
     void SetParticleNum(uint32_t inParticleNum) { particleNum = inParticleNum; }
-    void SetTailLength(float inTailLength) { tailLength = inTailLength; }
+    void SetTailLength(float inTailNum) { tailLength = inTailNum; }
 
     void Draw(const Program* program) const;
 
 private:
     Particle() {}
-    void Init(const uint32_t inParticleNum, const uint32_t inTailLength, uint32_t primitiveType);
+    void Init(const uint32_t inParticleNum, const uint32_t inTailNum, uint32_t primitiveType);
 
     uint32_t m_primitiveType{GL_POINTS};
     VertexLayoutUPtr m_vertexLayout;
@@ -51,7 +51,7 @@ private:
     BufferPtr m_tailColorBuffer;
 
     uint32_t particleNum { 1024 * 32 };
-    float tailLength { 256 };
+    int tailLength { 256 };
 };
 
 #endif // __PARTICLE_H__

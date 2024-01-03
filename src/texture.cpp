@@ -25,6 +25,14 @@ TextureUPtr Texture::CreateFromImage(const Image *image)
     return std::move(texture);
 }
 
+TextureUPtr Texture::CreateFromImage(const Image *image, uint32_t minFilter, uint32_t magFilter)
+{
+    auto texture = TextureUPtr(new Texture());
+    texture->CreateTexture(minFilter, magFilter);
+    texture->SetTextureFromImage(image);
+    return std::move(texture);
+}
+
 void Texture::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -47,8 +55,16 @@ void Texture::CreateTexture()
     glGenTextures(1, &m_texture);
     // bind and set default filter and wrap option
     Bind();
-    SetFilter(GL_NEAREST, GL_NEAREST);
-    //SetFilter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    SetFilter(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+    SetWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+}
+
+void Texture::CreateTexture(uint32_t minFilter, uint32_t magFilter)
+{
+    glGenTextures(1, &m_texture);
+    // bind and set default filter and wrap option
+    Bind();
+    SetFilter(minFilter, magFilter);
     SetWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 }
 
@@ -70,13 +86,15 @@ void Texture::SetTextureFromImage(const Image *image)
         break;
     }
 
+    SPDLOG_INFO("{}", format);
+
     m_width = image->GetWidth();
     m_height = image->GetHeight();
     m_format = format;
 
     glTexImage2D(GL_TEXTURE_2D, 0, m_format,
                  m_width, m_height, 0,
-                 format, GL_UNSIGNED_BYTE,
+                 m_format, GL_UNSIGNED_BYTE,
                  image->GetData());
 
     glGenerateMipmap(GL_TEXTURE_2D);

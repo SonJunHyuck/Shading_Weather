@@ -44,14 +44,14 @@ bool Context::Init()
 
     // texture
     m_worldTexture = Texture::CreateFromImage(Image::Load("./images/world.png").get());
-    m_windTexture = Texture::CreateFromImage(Image::Load("./images/wind.png").get());
+    m_windTexture = Texture::CreateFromImage(Image::Load("./images/wind.png").get(), GL_LINEAR, GL_LINEAR);
 
     // quad
     m_worldQuad = Quad::CreateQuad();
     m_screenQuad = Quad::CreateQuad();
 
     // particle
-    double particleNum = 1024 * 32;
+    int particleNum = 1024 * 32;
     int tailLength = 256;
     m_particleResolution = ceil(sqrt(particleNum));
     particleNum = m_particleResolution * m_particleResolution;  // sqrt 후 재보정
@@ -60,14 +60,15 @@ bool Context::Init()
     std::vector<glm::vec4> particleState = std::vector<glm::vec4>((double)particleNum);
     for (int i = 0; i < particleState.size(); i++)
     {
-      uint8_t r = floor(((float)rand() / (float)RAND_MAX) * tailLength);
-      uint8_t g = floor(((float)rand() / (float)RAND_MAX) * tailLength);
-      uint8_t b = floor(((float)rand() / (float)RAND_MAX) * tailLength);
-      uint8_t a = floor(((float)rand() / (float)RAND_MAX) * tailLength);
+      uint8_t r = floor(((float)rand() / (float)RAND_MAX) * 256);
+      uint8_t g = floor(((float)rand() / (float)RAND_MAX) * 256);
+      uint8_t b = floor(((float)rand() / (float)RAND_MAX) * 256);
+      uint8_t a = floor(((float)rand() / (float)RAND_MAX) * 256);
+  
       particleState[i] = glm::vec4(r, g, b, a);
       //SPDLOG_INFO("{} {} {} {}", r, g, b, a);
     }
-    m_particleStateTexture = Texture::CreateFromImage(Image::CreateWithData(m_particleResolution, m_particleResolution, particleState).get());
+    m_particleStateTexture = Texture::CreateFromImage(Image::CreateWithData(m_particleResolution, m_particleResolution, particleState).get(), GL_NEAREST, GL_NEAREST);
 
     m_particles = Particle::Create(particleNum, particleNum * tailLength, GL_POINTS);
     m_particles->SetParticleNum(particleNum);
@@ -88,9 +89,16 @@ void Context::Render()
             glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
         }
         ImGui::Separator();
+
+        int particleNum = m_particles->GetParticleNum();
+        if(ImGui::InputInt("Particle Number", &particleNum, 1024, 2048))
+        {
+          m_particles->SetParticleNum(particleNum);
+        }
     }
     ImGui::End();
 
+    // bind texture
     glActiveTexture(GL_TEXTURE0);
     m_framebuffer->GetColorAttachment()->Bind();
     glActiveTexture(GL_TEXTURE1);
@@ -107,7 +115,7 @@ void Context::Render()
     m_computeProgram->SetUniform("tail_length", m_particles->GetTailLength());
     m_computeProgram->SetUniform("wind_texture", 1);
     m_computeProgram->SetUniform("particle_texture", 2);
-    glDispatchCompute(m_particles->GetParticleNum() / m_particles->GetTailLength(), 1, 1);
+    glDispatchCompute(m_particles->GetParticleNum() / (m_particles->GetTailLength()), 1, 1);
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
     // on the framebuffer
