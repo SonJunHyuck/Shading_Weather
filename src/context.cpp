@@ -44,14 +44,14 @@ bool Context::Init()
 
     // texture
     m_worldTexture = Texture::CreateFromImage(Image::Load("./images/world.png").get());
-    m_windTexture = Texture::CreateFromImage(Image::Load("./images/wind.png").get(), GL_LINEAR, GL_LINEAR);
+    m_windTexture = Texture::CreateFromImage(Image::Load("./images/wind.png").get(), GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
 
     // quad
     m_worldQuad = Quad::CreateQuad();
     m_screenQuad = Quad::CreateQuad();
 
     // particle
-    int particleNum = 1024 * 32;
+    int particleNum = 1024 * 32 * 8;
     int tailLength = 256;
     m_particleResolution = ceil(sqrt(particleNum));
     particleNum = m_particleResolution * m_particleResolution;  // sqrt 후 재보정
@@ -66,7 +66,6 @@ bool Context::Init()
       uint8_t a = floor(((float)rand() / (float)RAND_MAX) * 256);
   
       particleState[i] = glm::vec4(r, g, b, a);
-      //SPDLOG_INFO("{} {} {} {}", r, g, b, a);
     }
     m_particleStateTexture = Texture::CreateFromImage(Image::CreateWithData(m_particleResolution, m_particleResolution, particleState).get(), GL_NEAREST, GL_NEAREST);
 

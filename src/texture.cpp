@@ -33,6 +33,14 @@ TextureUPtr Texture::CreateFromImage(const Image *image, uint32_t minFilter, uin
     return std::move(texture);
 }
 
+TextureUPtr Texture::CreateFromImage(const Image *image, uint32_t minFilter, uint32_t magFilter, uint32_t sWrap, uint32_t tWrap)
+{
+    auto texture = TextureUPtr(new Texture());
+    texture->CreateTexture(minFilter, magFilter, sWrap, tWrap);
+    texture->SetTextureFromImage(image);
+    return std::move(texture);
+}
+
 void Texture::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -68,6 +76,15 @@ void Texture::CreateTexture(uint32_t minFilter, uint32_t magFilter)
     SetWrap(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 }
 
+void Texture::CreateTexture(uint32_t minFilter, uint32_t magFilter, uint32_t sWrap, uint32_t tWrap)
+{
+    glGenTextures(1, &m_texture);
+    // bind and set default filter and wrap option
+    Bind();
+    SetFilter(minFilter, magFilter);
+    SetWrap(sWrap, tWrap);
+}
+
 void Texture::SetTextureFromImage(const Image *image)
 {
     GLenum format = GL_RGBA;
@@ -85,8 +102,6 @@ void Texture::SetTextureFromImage(const Image *image)
         format = GL_RGB;
         break;
     }
-
-    SPDLOG_INFO("{}", format);
 
     m_width = image->GetWidth();
     m_height = image->GetHeight();
