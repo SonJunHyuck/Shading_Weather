@@ -11,8 +11,10 @@ void main()
     vec4 col = texture(tex, TexCoords);
 
     // force color set map line
-    if(col.w > 0.01)
+    if(col.a > 0.01)
         col = vec4(1, 1, 1, 1);
-
+    else
+        col = vec4(1, 1, 1, 0);
+    
     FragColor = col;
 } 

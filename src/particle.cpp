@@ -10,7 +10,7 @@ ParticleUPtr Particle::Create(const uint32_t inParticleNum, const uint32_t inTai
 void Particle::Draw(const Program* program) const
 {
     m_vertexLayout->Bind();
-    glDrawArrays(GL_POINTS, 0, tailLength * particleNum);
+    glDrawArrays(GL_POINTS, 0, m_tailLength * m_particleNum);
 }
 
 void Particle::Init(const uint32_t inParticleNum, const uint32_t inTailNum, uint32_t primitiveType)

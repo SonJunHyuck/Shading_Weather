@@ -72,6 +72,8 @@ bool Context::Init()
     m_particles = Particle::Create(particleNum, particleNum * tailLength, GL_POINTS);
     m_particles->SetParticleNum(particleNum);
     m_particles->SetTailLength(tailLength);
+    m_particles->m_particleMAX = particleNum;
+    m_particles->m_tailLengthMAX = tailLength;
 
     glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
 
@@ -92,8 +94,13 @@ void Context::Render()
         int particleNum = m_particles->GetParticleNum();
         if(ImGui::InputInt("Particle Number", &particleNum, 1024, 2048))
         {
-          m_particles->SetParticleNum(particleNum);
+          m_particles->SetParticleNum(glm::clamp<int>(particleNum, 0, m_particles->m_particleMAX));
         }
+        
+        ImGui::Value("Particle Count", m_particles->GetParticleNum());
+        ImGui::Value("Tail Length", m_particles->GetTailLength());
+        ImGui::Value("Total Vertex Count", m_particles->GetParticleNum() * m_particles->GetTailLength());
+        ImGui::Separator();
     }
     ImGui::End();
 
@@ -121,24 +128,25 @@ void Context::Render()
     m_framebuffer->Bind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // draw particle
-    m_particleProgram->Use();
-    m_particles->Draw(m_particleProgram.get());
 
     // drawm world map
     m_mapProgram->Use();
     m_mapProgram->SetUniform("tex", 3);
     m_worldQuad->Draw(m_mapProgram.get());
 
+    // draw particle
+    m_particleProgram->Use();
+    m_particles->Draw(m_particleProgram.get());
+
     // off the framebuffer
     Framebuffer::BindToDefault();
 
     // rendering
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 
     m_postProgram->Use();
     m_postProgram->SetUniform("tex", 0);

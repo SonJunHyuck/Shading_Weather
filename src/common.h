@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __COMMON_H__
+#define __COMMON_H__
 
 #include <memory>
 #include <string>
@@ -26,3 +27,6 @@ using klassName ## WPtr = std::weak_ptr<klassName>;
 
 // optional : 포인터의 메모리 누수 위험 방지 장치
 std::optional<std::string> LoadTextFile(const std::string& filename);
+
+
+#endif // __COMMON_H__

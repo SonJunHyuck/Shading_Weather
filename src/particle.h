@@ -28,14 +28,16 @@ public:
     static ParticleUPtr Create(const uint32_t inParticleNum, const uint32_t inTailNum, uint32_t primitiveType);
 
     const VertexLayout *GetVertexLayout() const { return m_vertexLayout.get(); }
-    const uint32_t GetParticleNum() const { return particleNum; }
-    const int GetTailLength() const { return tailLength; }
+    const uint32_t GetParticleNum() const { return m_particleNum; }
+    const int GetTailLength() const { return m_tailLength; }
     
-    void SetParticleNum(uint32_t inParticleNum) { particleNum = inParticleNum; }
-    void SetTailLength(float inTailNum) { tailLength = inTailNum; }
+    void SetParticleNum(uint32_t inParticleNum) { m_particleNum = inParticleNum; }
+    void SetTailLength(float inTailNum) { m_tailLength = inTailNum; }
 
     void Draw(const Program* program) const;
 
+    uint32_t m_particleMAX { 1024 * 32 };
+    uint32_t m_tailLengthMAX { 256 };
 private:
     Particle() {}
     void Init(const uint32_t inParticleNum, const uint32_t inTailNum, uint32_t primitiveType);
@@ -50,8 +52,8 @@ private:
     BufferPtr m_tailPositionBuffer;
     BufferPtr m_tailColorBuffer;
 
-    uint32_t particleNum { 1024 * 32 };
-    int tailLength { 256 };
+    uint32_t m_particleNum { 1024 * 32 };
+    int m_tailLength { 256 };
 };
 
 #endif // __PARTICLE_H__

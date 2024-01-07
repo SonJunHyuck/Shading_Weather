@@ -67,13 +67,12 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     WINDOW_NAME="${WINDOW_NAME}"
     WINDOW_WIDTH=${WINDOW_WIDTH}
     WINDOW_HEIGHT=${WINDOW_HEIGHT}
-    )
+)
 
 # Dependency들이 먼저 build 될 수 있게 관계 설정
 # 리스트에 있는 타겟들 먼저 컴파일 한 후에 우리 프로젝트 컴파일 해라.
 # 안적으면, 우리 프로젝트와 라이브러리를 병렬로 빌드함 -> 오류
 add_dependencies(${PROJECT_NAME} ${DEP_LIST})
-
 
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shader DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/images DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
