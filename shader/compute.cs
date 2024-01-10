@@ -68,7 +68,7 @@ void main ()
 
      // position
      velocity = Interpolation(velocity);
-     velocity *= delta * delta * 16;
+     velocity *= delta * delta;
      positions[index] = position + velocity;  // new position
      
      // age

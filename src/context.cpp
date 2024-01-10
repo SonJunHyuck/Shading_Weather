@@ -52,7 +52,7 @@ bool Context::Init()
 
     // particle
     int particleNum = 1024 * 32 * 8;
-    int tailLength = 256;
+    int tailLength = 128;
     m_particleResolution = ceil(sqrt(particleNum));
     particleNum = m_particleResolution * m_particleResolution;  // sqrt 후 재보정
 
@@ -85,6 +85,7 @@ void Context::Render()
     // begin, end pair -> UI Window #imgui
     if (ImGui::Begin("Wind Params"))
     {
+        ImGui::SetWindowFontScale(1.4f);
         if(ImGui::ColorEdit4("Clear Color", glm::value_ptr(m_clearColor)))
         {
             glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
@@ -99,7 +100,7 @@ void Context::Render()
         
         ImGui::Value("Particle Count", m_particles->GetParticleNum());
         ImGui::Value("Tail Length", m_particles->GetTailLength());
-        ImGui::Value("Total Vertex Count", m_particles->GetParticleNum() * m_particles->GetTailLength());
+        ImGui::Value("Total Rendered Point Count", m_particles->GetParticleNum() * m_particles->GetTailLength());
         ImGui::Separator();
     }
     ImGui::End();
