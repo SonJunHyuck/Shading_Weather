@@ -5,9 +5,7 @@
 ### Video
 - https://youtu.be/p5STJoc0wRI
 <p align="center">
-  New
   <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/7.gif">
-  Old
   <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/6.gif">
 </p>
 
