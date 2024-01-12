@@ -4,13 +4,10 @@
 
 ### Video
 - https://youtu.be/p5STJoc0wRI
-<p align="center">
-  <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/6.gif" width="600" height="336">
-</p>
-:arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down:
-<p align="center">
-  <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/7.gif" width="600" height="336">
-</p>
+<p align="center"> <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/6.gif" width="600" height="336"> </p>
+<p align="center"> :arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down::arrow_down: </p>
+<p align="center"> <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/7.gif" width="600" height="336"> </p>
+
 
 
 
