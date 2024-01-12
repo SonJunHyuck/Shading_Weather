@@ -7,6 +7,7 @@ layout(location = 1) uniform float particle_res;
 layout(location = 2) uniform int tail_length;
 layout(location = 3) uniform sampler2D wind_texture;
 layout(location = 4) uniform sampler2D particle_texture;
+layout(location = 5) uniform float velocity_weight;
 
 layout(std430, binding = 0) buffer iblock { float indices[]; };
 layout(std430, binding = 1) buffer pblock { vec2 positions[]; };
@@ -68,10 +69,10 @@ void main ()
 
      // position
      velocity = Interpolation(velocity);
-     velocity *= delta * delta;
+     velocity *= delta * delta * velocity_weight;
      positions[index] = position + velocity;  // new position
      
      // age
-     age += delta * 20;
+     age += delta * 20 * velocity_weight;
      ages[index] = age;
 }

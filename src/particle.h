@@ -30,9 +30,11 @@ public:
     const VertexLayout *GetVertexLayout() const { return m_vertexLayout.get(); }
     const uint32_t GetParticleNum() const { return m_particleNum; }
     const int GetTailLength() const { return m_tailLength; }
+    const float GetVelocityWeight() const { return m_velocityWeight; }
     
     void SetParticleNum(uint32_t inParticleNum) { m_particleNum = inParticleNum; }
     void SetTailLength(float inTailNum) { m_tailLength = inTailNum; }
+    void SetVelocityWeight(float inVelocityWeight) { m_velocityWeight = inVelocityWeight; }
 
     void Draw(const Program* program) const;
 
@@ -54,6 +56,7 @@ private:
 
     uint32_t m_particleNum { 1024 * 32 };
     int m_tailLength { 256 };
+    float m_velocityWeight { 1.0f };
 };
 
 #endif // __PARTICLE_H__

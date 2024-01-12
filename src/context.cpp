@@ -93,9 +93,19 @@ void Context::Render()
         ImGui::Separator();
 
         int particleNum = m_particles->GetParticleNum();
-        if(ImGui::InputInt("Particle Number", &particleNum, 1024, 2048))
+        int tailLength = m_particles->GetTailLength();
+        float velocityWeight = m_particles->GetVelocityWeight();
+        if(ImGui::InputInt("Set Particle Count", &particleNum, 1024, 2048))
         {
           m_particles->SetParticleNum(glm::clamp<int>(particleNum, 0, m_particles->m_particleMAX));
+        }
+        if(ImGui::InputInt("Set Tail Length", &tailLength, 1, 2))
+        {
+          m_particles->SetTailLength(glm::clamp<int>(tailLength, 1, m_particles->m_tailLengthMAX));
+        }
+        if(ImGui::InputFloat("Set Velocity", &velocityWeight, 0.01f, 0.02f))
+        {
+          m_particles->SetVelocityWeight(glm::clamp<float>(velocityWeight, 0.0f, 1.0f));
         }
         
         ImGui::Value("Particle Count", m_particles->GetParticleNum());
@@ -122,6 +132,7 @@ void Context::Render()
     m_computeProgram->SetUniform("tail_length", m_particles->GetTailLength());
     m_computeProgram->SetUniform("wind_texture", 1);
     m_computeProgram->SetUniform("particle_texture", 2);
+    m_computeProgram->SetUniform("velocity_weight", m_particles->GetVelocityWeight());
     glDispatchCompute(m_particles->GetParticleNum() / (m_particles->GetTailLength()), 1, 1);
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
