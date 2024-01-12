@@ -3,7 +3,7 @@
 - https://blog.mapbox.com/how-i-built-a-wind-map-with-webgl-b63022b5537f
 
 ### Video
-https://youtu.be/p5STJoc0wRI
+- https://youtu.be/p5STJoc0wRI
 
 ### Cmake Build Kit
 - Windows : Clang 16.0.5 (GNU CLI) for MSCV 17.8.34xxx (Visual Studio Tools 2022 Release - amd64)
