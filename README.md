@@ -15,9 +15,6 @@
 1. Cmake -> Configure -> Visual Studio 17 2022 -> x64
 2. Generate
 3. Open Project (wind_simulatio.sln)
-4. build type 설정 : Release
-5. wind_simulation project 내부 주석 제거 (한글 주석으로 인해 빌드 오류 발생)
-6. ctrl + f -> alt + e(정규식 변환) -> //.* -> all replace
 7. build
 
 ### Cmake Build Kit (for Visual code)
