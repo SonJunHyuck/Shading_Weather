@@ -22,6 +22,12 @@ if(APPLE)
     set(CMAKE_CXX_FLAGS "-framework Cocoa -framework IOKit -framework OpenGL")
 endif()
 
+# window msvc compiler encoding problem
+if(MSVC)
+    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+endif()
+
 # glfw 변수 정의
 set(WINDOW_NAME "Wind Simulation")
 set(WINDOW_WIDTH 640)
