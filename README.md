@@ -9,7 +9,7 @@
 <p align="center"> <img src="https://github.com/SonJunHyuck/Wind_Simulation/blob/main/videos/Wind%20Simulation%20with%20Compute%20Shader(New).png" width="600" height="336"> </p>
 
 ### How to build
-그림 설명 : https://sonnysmile.notion.site/Wind-Simulation-ece1ff331abe444eb23320a7842c3d56?pvs=4
+그림 설명 : https://sonnysmile.notion.site/CMake-61381241a2954852976a15a4d3c03291?pvs=4
 
 요약
 1. Cmake -> Configure -> Visual Studio 17 2022 -> x64
@@ -25,4 +25,5 @@
 
 ### Refactoring (2024. 01)
 - https://github.com/SonJunHyuck/OpenGL_BASIC
+- https://sonnysmile.notion.site/Wind-Map-Simulation-183ed1cbaf6c808ab25cea13d6f74fb7?pvs=4
 - 괜찮은 OpenGL Framework를 찾아, 본 프로젝트 리펙토링을 진행
